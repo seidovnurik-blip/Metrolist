@@ -5,34 +5,30 @@
 
 package com.metrolist.music.ui.component
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.metrolist.music.R
 
 @Composable
@@ -53,7 +49,7 @@ fun NavigationTitle(
             .clickable(enabled = onClick != null) {
                 onClick?.invoke()
             }
-            .padding(horizontal = 12.dp, vertical = 12.dp)
+            .padding(horizontal = 16.dp, vertical = 10.dp)
     ) {
         thumbnail?.invoke()
 
@@ -65,44 +61,39 @@ fun NavigationTitle(
                 Text(
                     text = label,
                     style = MaterialTheme.typography.labelLarge,
+                    color = Color(0xFF8E8E93),
                     overflow = TextOverflow.Ellipsis,
                 )
             }
 
             Text(
                 text = title,
-                style = MaterialTheme.typography.titleLarge,
+                fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary,
+                color = MaterialTheme.colorScheme.onSurface,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
             )
         }
 
         onPlayAllClick?.let { playAllClick ->
-            OutlinedButton(
-                onClick = playAllClick,
-                shape = RoundedCornerShape(12.dp),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)),
-                colors = ButtonDefaults.outlinedButtonColors(
-                    contentColor = MaterialTheme.colorScheme.primary
-                ),
-                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 2.dp),
+            Text(
+                text = stringResource(R.string.play_all),
+                color = MaterialTheme.colorScheme.primary,
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Medium,
                 modifier = Modifier
-                    .height(24.dp)
-            ) {
-                Text(
-                    text = stringResource(R.string.play_all),
-                    style = MaterialTheme.typography.labelSmall
-                )
-            }
+                    .clip(RoundedCornerShape(8.dp))
+                    .clickable { playAllClick() }
+                    .padding(horizontal = 8.dp, vertical = 4.dp),
+            )
         }
 
         if (onClick != null) {
-            Icon(
-                painter = painterResource(R.drawable.arrow_forward),
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary
+            Text(
+                text = "\u203A",
+                fontSize = 28.sp,
+                color = Color(0xFF8E8E93),
             )
         }
     }
