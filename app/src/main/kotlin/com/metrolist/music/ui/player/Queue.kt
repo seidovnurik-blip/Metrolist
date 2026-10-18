@@ -266,7 +266,7 @@ fun Queue(
             if (useNewPlayerDesign) {
                 // New design
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
                     modifier =
                         Modifier
@@ -381,7 +381,6 @@ fun Queue(
                         playerBackground = playerBackground,
                     )
 
-                    Spacer(modifier = Modifier.weight(1f))
 
                     Box(
                         modifier =
@@ -1285,7 +1284,7 @@ private fun PlayerQueueButton(
 ) {
     val buttonModifier =
         Modifier
-            .clip(shape)
+            .clip(RoundedCornerShape(50))
             .clickable(enabled = enabled, onClick = onClick)
 
     val alphaFactor = if (enabled) 1f else 0.35f
@@ -1298,7 +1297,7 @@ private fun PlayerQueueButton(
                 .then(
                     buttonModifier.border(
                         width = 1.dp,
-                        color = textButtonColor.copy(alpha = 0.3f),
+                        color = Color.Transparent,
                         shape = shape,
                     ),
                 ).alpha(alphaFactor)
