@@ -220,7 +220,7 @@ fun BottomSheetPlayer(
     val (useNewPlayerDesign, onUseNewPlayerDesignChange) =
         rememberPreference(
             UseNewPlayerDesignKey,
-            defaultValue = true,
+            defaultValue = false,
         )
     val (hidePlayerThumbnail, onHidePlayerThumbnailChange) = rememberPreference(HidePlayerThumbnailKey, false)
     val (hideStatusBarOnFullscreen) = rememberPreference(HideStatusBarOnFullscreenKey, false)
@@ -236,7 +236,7 @@ fun BottomSheetPlayer(
 
     val playerBackground by rememberEnumPreference(
         key = PlayerBackgroundStyleKey,
-        defaultValue = PlayerBackgroundStyle.DEFAULT,
+        defaultValue = PlayerBackgroundStyle.BLUR,
     )
     val playerButtonsStyle by rememberEnumPreference(
         key = PlayerButtonsStyleKey,
@@ -326,7 +326,7 @@ fun BottomSheetPlayer(
     val canSkipNext by playerConnection.canSkipNext.collectAsStateWithLifecycle()
     val isMuted by playerConnection.isMuted.collectAsStateWithLifecycle()
 
-    val sliderStyle by rememberEnumPreference(SliderStyleKey, SliderStyle.DEFAULT)
+    val sliderStyle by rememberEnumPreference(SliderStyleKey, SliderStyle.SLIM)
     val squigglySlider by rememberPreference(SquigglySliderKey, defaultValue = false)
 
     // Listen Together state (reactive)
@@ -482,7 +482,7 @@ fun BottomSheetPlayer(
                 playerBackground == PlayerBackgroundStyle.GRADIENT -> {
                 when (playerButtonsStyle) {
                     PlayerButtonsStyle.DEFAULT -> {
-                        Pair(Color.White, Color.Black)
+                        Pair(Color.White.copy(alpha = 0.2f), Color.White)
                     }
 
                     PlayerButtonsStyle.PRIMARY -> {
@@ -971,7 +971,7 @@ fun BottomSheetPlayer(
                                         modifier =
                                             Modifier
                                                 .size(32.dp),
-                                        tint = textButtonColor.copy(alpha = 0.7f),
+                                        tint = Color.White.copy(alpha = 0.7f),
                                     )
                                 }
                             } else {
@@ -1393,7 +1393,7 @@ fun BottomSheetPlayer(
                             }
                         },
                         enabled = !isListenTogetherGuest,
-                        colors = PlayerSliderColors.getSliderColors(textButtonColor, playerBackground, useDarkTheme),
+                        colors = PlayerSliderColors.getSliderColors(Color.White, playerBackground, useDarkTheme),
                         modifier = Modifier.padding(horizontal = PlayerHorizontalPadding),
                     )
                 }
@@ -1419,7 +1419,7 @@ fun BottomSheetPlayer(
                                 sliderPosition = null
                             },
                             modifier = Modifier.padding(horizontal = PlayerHorizontalPadding),
-                            colors = PlayerSliderColors.getSliderColors(textButtonColor, playerBackground, useDarkTheme),
+                            colors = PlayerSliderColors.getSliderColors(Color.White, playerBackground, useDarkTheme),
                             isPlaying = effectiveIsPlaying,
                         )
                     } else {
@@ -1441,7 +1441,7 @@ fun BottomSheetPlayer(
                                 }
                                 sliderPosition = null
                             },
-                            colors = PlayerSliderColors.getSliderColors(textButtonColor, playerBackground, useDarkTheme),
+                            colors = PlayerSliderColors.getSliderColors(Color.White, playerBackground, useDarkTheme),
                             modifier = Modifier.padding(horizontal = PlayerHorizontalPadding),
                             isPlaying = effectiveIsPlaying,
                         )
@@ -1481,7 +1481,7 @@ fun BottomSheetPlayer(
                         track = { sliderState ->
                             PlayerSliderTrack(
                                 sliderState = sliderState,
-                                colors = PlayerSliderColors.getSliderColors(textButtonColor, playerBackground, useDarkTheme),
+                                colors = PlayerSliderColors.getSliderColors(Color.White, playerBackground, useDarkTheme),
                             )
                         },
                         modifier = Modifier.padding(horizontal = PlayerHorizontalPadding),
@@ -1759,7 +1759,7 @@ fun BottomSheetPlayer(
                                     Modifier
                                         .size(72.dp)
                                         .clip(RoundedCornerShape(playPauseRoundness))
-                                        .background(textButtonColor)
+                                        .background(Color.Transparent)
                                         .clickable {
                                             if (isListenTogetherGuest) {
                                                 playerConnection.toggleMute()
@@ -1796,11 +1796,11 @@ fun BottomSheetPlayer(
                                             },
                                         ),
                                     contentDescription = null,
-                                    colorFilter = ColorFilter.tint(iconButtonColor),
+                                    colorFilter = ColorFilter.tint(Color.White),
                                     modifier =
                                         Modifier
                                             .align(Alignment.Center)
-                                            .size(36.dp),
+                                            .size(48.dp),
                                 )
                             }
 

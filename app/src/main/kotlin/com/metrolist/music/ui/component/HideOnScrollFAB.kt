@@ -9,6 +9,7 @@ import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -19,13 +20,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.material3.FloatingActionButton
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -55,29 +56,39 @@ fun BoxScope.HideOnScrollFAB(
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
         ) {
             if (onRecognitionClick != null) {
                 SmallFloatingActionButton(
                     onClick = onRecognitionClick,
-                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                    modifier = Modifier.size(40.dp)
+                    shape = CircleShape,
+                    containerColor = Color(0xF22C2C2E),
+                    contentColor = Color.White,
+                    modifier = Modifier
+                        .size(48.dp)
+                        .border(0.5.dp, Color(0xFF48484A), CircleShape)
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.mic),
                         contentDescription = stringResource(R.string.recognize_music),
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(22.dp)
                     )
                 }
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(10.dp))
             }
-            FloatingActionButton(
+            SmallFloatingActionButton(
                 onClick = onClick,
+                shape = CircleShape,
+                containerColor = Color(0xF22C2C2E),
+                contentColor = Color(0xFFFA2D48),
+                modifier = Modifier
+                    .size(48.dp)
+                    .border(0.5.dp, Color(0xFF48484A), CircleShape)
             ) {
                 Icon(
                     painter = painterResource(icon),
                     contentDescription = null,
+                    modifier = Modifier.size(22.dp),
                 )
             }
         }

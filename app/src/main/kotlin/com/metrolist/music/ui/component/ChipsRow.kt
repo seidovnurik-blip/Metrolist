@@ -77,10 +77,13 @@ fun <E> ChipsRow(
                 label = { Text(label) },
                 selected = currentValue == value,
                 colors = FilterChipDefaults.filterChipColors(
-                    containerColor = containerColor,
+                    containerColor = Color(0xFF2C2C2E),
+                    labelColor = Color.White,
+                    selectedContainerColor = Color(0xFFFA2D48),
+                    selectedLabelColor = Color.White,
                 ),
                 onClick = { onValueUpdate(value) },
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(20.dp),
                 border = null
             )
 
