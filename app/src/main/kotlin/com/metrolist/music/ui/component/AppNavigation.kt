@@ -304,5 +304,5 @@ private fun AppleNavItem(
 
 private val AppleNavRed = Color(0xFFFA2D48)
 private val AppleNavGray = Color(0xFF8E8E93)
-private val AppleNavSurface = Color(0xEB1C1C1E)
+private val AppleNavSurface = Color(0xFF1C1C1E)
 private val AppleNavOutline = Color(0xFF38383A)
