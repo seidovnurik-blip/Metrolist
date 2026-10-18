@@ -4,6 +4,11 @@
  */
 
 package com.metrolist.music
+import androidx.compose.foundation.clickable
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -1059,37 +1064,79 @@ class MainActivity : FragmentActivity() {
                                 exit = fadeOut(animationSpec = tween(durationMillis = 200)),
                             ) {
                                 Row {
+                                    // apple-top-bar
                                     TopAppBar(
                                         title = {
                                             Text(
                                                 text = currentTitleRes?.let { stringResource(it) } ?: "",
-                                                style = MaterialTheme.typography.titleLarge,
+                                                fontSize = 30.sp,
+                                                fontWeight = FontWeight.Bold,
                                             )
                                         },
                                         actions = {
-                                            if (showHistoryButton) {
-                                                IconButton(onClick = { navController.navigate("history") }) {
-                                                    Icon(
-                                                        painter = painterResource(R.drawable.history),
-                                                        contentDescription = stringResource(R.string.history),
+                                            var menuOpen by remember { mutableStateOf(false) }
+                                            Box {
+                                                Box(
+                                                    modifier =
+                                                        Modifier
+                                                            .padding(end = 8.dp)
+                                                            .size(36.dp)
+                                                            .clip(CircleShape)
+                                                            .background(Color(0xFF2C2C2E))
+                                                            .clickable { menuOpen = true },
+                                                    contentAlignment = Alignment.Center,
+                                                ) {
+                                                    Text(
+                                                        text = "\u22EF",
+                                                        color = Color.White,
+                                                        fontSize = 20.sp,
+                                                        fontWeight = FontWeight.Bold,
                                                     )
                                                 }
-                                            }
-                                            IconButton(onClick = { navController.navigate("stats") }) {
-                                                Icon(
-                                                    painter = painterResource(R.drawable.stats),
-                                                    contentDescription = stringResource(R.string.stats),
-                                                )
-                                            }
-                                            if (listenTogetherInTopBar) {
-                                                IconButton(onClick = { navController.navigate("listen_together_from_topbar") }) {
-                                                    Icon(
-                                                        painter = painterResource(R.drawable.group_outlined),
-                                                        contentDescription = stringResource(R.string.together),
+                                                DropdownMenu(
+                                                    expanded = menuOpen,
+                                                    onDismissRequest = { menuOpen = false },
+                                                ) {
+                                                    if (showHistoryButton) {
+                                                        DropdownMenuItem(
+                                                            text = { Text(stringResource(R.string.history)) },
+                                                            leadingIcon = { Icon(painterResource(R.drawable.history), null) },
+                                                            onClick = {
+                                                                menuOpen = false
+                                                                navController.navigate("history")
+                                                            },
+                                                        )
+                                                    }
+                                                    DropdownMenuItem(
+                                                        text = { Text(stringResource(R.string.stats)) },
+                                                        leadingIcon = { Icon(painterResource(R.drawable.stats), null) },
+                                                        onClick = {
+                                                            menuOpen = false
+                                                            navController.navigate("stats")
+                                                        },
                                                     )
+                                                    if (listenTogetherInTopBar) {
+                                                        DropdownMenuItem(
+                                                            text = { Text(stringResource(R.string.together)) },
+                                                            leadingIcon = { Icon(painterResource(R.drawable.group_outlined), null) },
+                                                            onClick = {
+                                                                menuOpen = false
+                                                                navController.navigate("listen_together_from_topbar")
+                                                            },
+                                                        )
+                                                    }
                                                 }
                                             }
-                                            IconButton(onClick = { showAccountDialog = true }) {
+                                            Box(
+                                                modifier =
+                                                    Modifier
+                                                        .padding(end = 12.dp)
+                                                        .size(36.dp)
+                                                        .clip(CircleShape)
+                                                        .background(Color(0xFF2C2C2E))
+                                                        .clickable { showAccountDialog = true },
+                                                contentAlignment = Alignment.Center,
+                                            ) {
                                                 BadgedBox(badge = {
                                                     if (latestVersionName != BuildConfig.BASE_VERSION_NAME) {
                                                         Badge()
@@ -1099,16 +1146,13 @@ class MainActivity : FragmentActivity() {
                                                         AsyncImage(
                                                             model = accountImageUrl,
                                                             contentDescription = stringResource(R.string.account),
-                                                            modifier =
-                                                                Modifier
-                                                                    .size(24.dp)
-                                                                    .clip(CircleShape),
+                                                            modifier = Modifier.size(36.dp).clip(CircleShape),
                                                         )
                                                     } else {
                                                         Icon(
                                                             painter = painterResource(R.drawable.account),
                                                             contentDescription = stringResource(R.string.account),
-                                                            modifier = Modifier.size(24.dp),
+                                                            modifier = Modifier.size(22.dp),
                                                         )
                                                     }
                                                 }
@@ -1117,11 +1161,11 @@ class MainActivity : FragmentActivity() {
                                         scrollBehavior = topAppBarScrollBehavior,
                                         colors =
                                             TopAppBarDefaults.topAppBarColors(
-                                                containerColor = if (pureBlack) Color.Black else MaterialTheme.colorScheme.surfaceContainer,
-                                                scrolledContainerColor = if (pureBlack) Color.Black else MaterialTheme.colorScheme.surfaceContainer,
-                                                titleContentColor = MaterialTheme.colorScheme.onSurface,
-                                                actionIconContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                                                navigationIconContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                                containerColor = Color.Black,
+                                                scrolledContainerColor = Color.Black,
+                                                titleContentColor = Color.White,
+                                                actionIconContentColor = Color.White,
+                                                navigationIconContentColor = Color.White,
                                             ),
                                         modifier =
                                             Modifier.windowInsetsPadding(
