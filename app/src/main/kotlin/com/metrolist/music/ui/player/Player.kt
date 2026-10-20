@@ -328,7 +328,7 @@ fun BottomSheetPlayer(
     val canSkipNext by playerConnection.canSkipNext.collectAsStateWithLifecycle()
     val isMuted by playerConnection.isMuted.collectAsStateWithLifecycle()
 
-    val sliderStyle = SliderStyle.DEFAULT
+    val sliderStyle = SliderStyle.SLIM
     val squigglySlider by rememberPreference(SquigglySliderKey, defaultValue = false)
 
     // Listen Together state (reactive)
@@ -1386,28 +1386,6 @@ fun BottomSheetPlayer(
                         },
                         enabled = !isListenTogetherGuest,
                         colors = PlayerSliderColors.getSliderColors(Color.White, playerBackground, useDarkTheme),
-                        thumb = { Spacer(modifier = Modifier.size(0.dp)) },
-                        track = {
-                            val endMs = if (duration == C.TIME_UNSET) 0f else duration.toFloat()
-                            val frac = if (endMs > 0f) ((sliderPosition ?: effectivePosition).toFloat() / endMs).coerceIn(0f, 1f) else 0f
-                            Box(
-                                modifier =
-                                    Modifier
-                                        .fillMaxWidth()
-                                        .height(6.dp)
-                                        .clip(RoundedCornerShape(3.dp))
-                                        .background(Color.White.copy(alpha = 0.3f)),
-                            ) {
-                                Box(
-                                    modifier =
-                                        Modifier
-                                            .fillMaxWidth(frac)
-                                            .fillMaxHeight()
-                                            .clip(RoundedCornerShape(3.dp))
-                                            .background(Color.White),
-                                )
-                            }
-                        },
                         modifier = Modifier.padding(horizontal = PlayerHorizontalPadding),
                     )
                 }
@@ -1493,10 +1471,25 @@ fun BottomSheetPlayer(
                         enabled = !isListenTogetherGuest,
                         thumb = { Spacer(modifier = Modifier.size(0.dp)) },
                         track = { sliderState ->
-                            PlayerSliderTrack(
-                                sliderState = sliderState,
-                                colors = PlayerSliderColors.getSliderColors(Color.White, playerBackground, useDarkTheme),
-                            )
+                            val sliderEnd = sliderRange.endInclusive
+                            val frac = if (sliderEnd > 0f) (sliderValue / sliderEnd).coerceIn(0f, 1f) else 0f
+                            Box(
+                                modifier =
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .height(6.dp)
+                                        .clip(RoundedCornerShape(3.dp))
+                                        .background(Color.White.copy(alpha = 0.3f)),
+                            ) {
+                                Box(
+                                    modifier =
+                                        Modifier
+                                            .fillMaxWidth(frac)
+                                            .fillMaxHeight()
+                                            .clip(RoundedCornerShape(3.dp))
+                                            .background(Color.White),
+                                )
+                            }
                         },
                         modifier = Modifier.padding(horizontal = PlayerHorizontalPadding),
                     )
