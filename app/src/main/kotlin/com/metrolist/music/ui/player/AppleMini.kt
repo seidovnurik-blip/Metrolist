@@ -37,7 +37,7 @@ fun AppleMiniCover(mediaMetadata: MediaMetadata?) {
         contentAlignment = Alignment.Center,
         modifier =
             Modifier
-                .size(40.dp)
+                .size(36.dp)
                 .clip(RoundedCornerShape(8.dp))
                 .background(Color(0xFF3A3A3C)),
     ) {
@@ -73,8 +73,8 @@ fun AppleMiniControls(
         when {
             isListenTogetherGuest -> if (isMuted) R.drawable.volume_off else R.drawable.volume_up
             playbackState == Player.STATE_ENDED -> R.drawable.replay
-            effectiveIsPlaying -> R.drawable.pause
-            else -> R.drawable.play
+            effectiveIsPlaying -> R.drawable.apple_pause
+            else -> R.drawable.apple_play
         }
 
     Row(
@@ -118,7 +118,7 @@ fun AppleMiniControls(
                     },
         ) {
             Icon(
-                painter = painterResource(R.drawable.skip_next),
+                painter = painterResource(R.drawable.apple_forward),
                 contentDescription = null,
                 tint = if (canSkipNext) tint else tint.copy(alpha = 0.4f),
                 modifier = Modifier.size(28.dp),

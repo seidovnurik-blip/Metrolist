@@ -4,6 +4,8 @@
  */
 
 package com.metrolist.music.ui.player
+import androidx.compose.ui.graphics.ColorMatrix
+import androidx.compose.foundation.layout.fillMaxHeight
 
 import androidx.activity.compose.BackHandler
 import android.content.ClipData
@@ -326,7 +328,7 @@ fun BottomSheetPlayer(
     val canSkipNext by playerConnection.canSkipNext.collectAsStateWithLifecycle()
     val isMuted by playerConnection.isMuted.collectAsStateWithLifecycle()
 
-    val sliderStyle by rememberEnumPreference(SliderStyleKey, SliderStyle.SLIM)
+    val sliderStyle = SliderStyle.DEFAULT
     val squigglySlider by rememberPreference(SquigglySliderKey, defaultValue = false)
 
     // Listen Together state (reactive)
@@ -861,6 +863,7 @@ fun BottomSheetPlayer(
                                                 .build(),
                                         contentDescription = null,
                                         contentScale = ContentScale.Crop,
+                                        colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(0.7f) }),
                                         modifier =
                                             Modifier
                                                 .fillMaxSize()
@@ -870,7 +873,7 @@ fun BottomSheetPlayer(
                                         modifier =
                                             Modifier
                                                 .fillMaxSize()
-                                                .background(Color.Black.copy(alpha = 0.3f)),
+                                                .background(Brush.verticalGradient(listOf(Color.Black.copy(alpha = 0.3f), Color.Black.copy(alpha = 0.58f)))),
                                     )
                                 }
                             }
@@ -1045,7 +1048,7 @@ fun BottomSheetPlayer(
                                     mediaMetadata.artists.forEachIndexed { index, artist ->
                                         val tag = "artist_${artist.id.orEmpty()}"
                                         pushStringAnnotation(tag = tag, annotation = artist.id.orEmpty())
-                                        withStyle(SpanStyle(color = TextBackgroundColor, fontSize = 16.sp)) {
+                                        withStyle(SpanStyle(color = TextBackgroundColor.copy(alpha = 0.7f), fontSize = 20.sp)) {
                                             append(artist.name)
                                         }
                                         pop()
@@ -1288,22 +1291,11 @@ fun BottomSheetPlayer(
                                     Modifier
                                         .size(40.dp)
                                         .clip(RoundedCornerShape(24.dp))
-                                        .background(textButtonColor)
-                                        .clickable {
-                                            val intent =
-                                                Intent().apply {
-                                                    action = Intent.ACTION_SEND
-                                                    type = "text/plain"
-                                                    putExtra(
-                                                        Intent.EXTRA_TEXT,
-                                                        "https://music.youtube.com/watch?v=${mediaMetadata.id}",
-                                                    )
-                                                }
-                                            context.startActivity(Intent.createChooser(intent, null))
-                                        },
+                                        .background(Color.Transparent)
+                                        .clickable { playerConnection.toggleLike() },
                             ) {
                                 Icon(
-                                    painter = painterResource(R.drawable.share),
+                                    painter = painterResource(if (if (currentSong?.song?.isEpisode == true) currentSong?.song?.inLibrary != null else currentSong?.song?.liked == true) R.drawable.apple_star_fill else R.drawable.apple_star),
                                     contentDescription = null,
                                     tint = iconButtonColor,
                                     modifier =
@@ -1394,6 +1386,28 @@ fun BottomSheetPlayer(
                         },
                         enabled = !isListenTogetherGuest,
                         colors = PlayerSliderColors.getSliderColors(Color.White, playerBackground, useDarkTheme),
+                        thumb = { Spacer(modifier = Modifier.size(0.dp)) },
+                        track = {
+                            val endMs = if (duration == C.TIME_UNSET) 0f else duration.toFloat()
+                            val frac = if (endMs > 0f) ((sliderPosition ?: effectivePosition).toFloat() / endMs).coerceIn(0f, 1f) else 0f
+                            Box(
+                                modifier =
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .height(6.dp)
+                                        .clip(RoundedCornerShape(3.dp))
+                                        .background(Color.White.copy(alpha = 0.3f)),
+                            ) {
+                                Box(
+                                    modifier =
+                                        Modifier
+                                            .fillMaxWidth(frac)
+                                            .fillMaxHeight()
+                                            .clip(RoundedCornerShape(3.dp))
+                                            .background(Color.White),
+                                )
+                            }
+                        },
                         modifier = Modifier.padding(horizontal = PlayerHorizontalPadding),
                     )
                 }
@@ -1608,7 +1622,7 @@ fun BottomSheetPlayer(
                                         .weight(backButtonWeight),
                             ) {
                                 Icon(
-                                    painter = painterResource(R.drawable.skip_previous),
+                                    painter = painterResource(R.drawable.apple_backward),
                                     contentDescription = null,
                                     modifier = Modifier.size(32.dp),
                                 )
@@ -1658,7 +1672,7 @@ fun BottomSheetPlayer(
                                                 if (isListenTogetherGuest) {
                                                     if (isMuted) R.drawable.volume_off else R.drawable.volume_up
                                                 } else {
-                                                    if (effectiveIsPlaying) R.drawable.pause else R.drawable.play
+                                                    if (effectiveIsPlaying) R.drawable.apple_pause else R.drawable.apple_play
                                                 },
                                             ),
                                         contentDescription =
@@ -1700,7 +1714,7 @@ fun BottomSheetPlayer(
                                         .weight(nextButtonWeight),
                             ) {
                                 Icon(
-                                    painter = painterResource(R.drawable.skip_next),
+                                    painter = painterResource(R.drawable.apple_forward),
                                     contentDescription = null,
                                     modifier = Modifier.size(32.dp),
                                 )
@@ -1718,12 +1732,12 @@ fun BottomSheetPlayer(
 
                             Box(modifier = Modifier.weight(1f)) {
                                 ResizableIconButton(
-                                    icon = R.drawable.skip_previous,
+                                    icon = R.drawable.apple_backward,
                                     enabled = canSkipPrevious && !isListenTogetherGuest,
                                     color = TextBackgroundColor,
                                     modifier =
                                         Modifier
-                                            .size(44.dp)
+                                            .size(38.dp)
                                             .align(Alignment.Center)
                                             .alpha(if (isListenTogetherGuest) 0.5f else 1f),
                                     onClick = playerConnection::seekToPrevious,
@@ -1768,9 +1782,9 @@ fun BottomSheetPlayer(
                                             ) {
                                                 R.drawable.replay
                                             } else if (effectiveIsPlaying) {
-                                                R.drawable.pause
+                                                R.drawable.apple_pause
                                             } else {
-                                                R.drawable.play
+                                                R.drawable.apple_play
                                             },
                                         ),
                                     contentDescription = null,
@@ -1778,7 +1792,7 @@ fun BottomSheetPlayer(
                                     modifier =
                                         Modifier
                                             .align(Alignment.Center)
-                                            .size(48.dp),
+                                            .size(60.dp),
                                 )
                             }
 
@@ -1786,33 +1800,19 @@ fun BottomSheetPlayer(
 
                             Box(modifier = Modifier.weight(1f)) {
                                 ResizableIconButton(
-                                    icon = R.drawable.skip_next,
+                                    icon = R.drawable.apple_forward,
                                     enabled = canSkipNext && !isListenTogetherGuest,
                                     color = TextBackgroundColor,
                                     modifier =
                                         Modifier
-                                            .size(44.dp)
+                                            .size(38.dp)
                                             .align(Alignment.Center)
                                             .alpha(if (isListenTogetherGuest) 0.5f else 1f),
                                     onClick = playerConnection::seekToNext,
                                 )
                             }
 
-                            Box(modifier = Modifier.weight(1f)) {
-                                // For episodes, show saved state (inLibrary); for songs, show liked state
-                                val isEpisode = currentSong?.song?.isEpisode == true
-                                val isFavorite = if (isEpisode) currentSong?.song?.inLibrary != null else currentSong?.song?.liked == true
-                                ResizableIconButton(
-                                    icon = if (isFavorite) R.drawable.favorite else R.drawable.favorite_border,
-                                    color = if (isFavorite) MaterialTheme.colorScheme.error else TextBackgroundColor,
-                                    modifier =
-                                        Modifier
-                                            .size(32.dp)
-                                            .padding(4.dp)
-                                            .align(Alignment.Center),
-                                    onClick = playerConnection::toggleLike,
-                                )
-                            }
+                            Spacer(modifier = Modifier.weight(1f))
                         }
                     }
                 }
@@ -2133,7 +2133,7 @@ private fun PlayerMoreMenuButton(
             Modifier
                 .size(40.dp)
                 .clip(RoundedCornerShape(24.dp))
-                .background(textButtonColor)
+                .background(Color.Transparent)
                 .clickable {
                     menuState.show {
                         PlayerMenu(

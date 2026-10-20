@@ -297,7 +297,7 @@ fun Queue(
                         )
 
                     PlayerQueueButton(
-                        icon = R.drawable.queue_music,
+                        icon = R.drawable.apple_queue,
                         onClick = { state.expandSoft() },
                         isActive = false,
                         shape = queueShape,
@@ -348,7 +348,7 @@ fun Queue(
                     )
 
                     PlayerQueueButton(
-                        icon = R.drawable.lyrics,
+                        icon = R.drawable.apple_lyrics,
                         onClick = { onToggleLyrics() },
                         isActive = showInlineLyrics,
                         shape = middleShape,
@@ -387,7 +387,7 @@ fun Queue(
                             Modifier
                                 .size(buttonSize)
                                 .clip(CircleShape)
-                                .background(textButtonColor)
+                                .background(Color.Transparent)
                                 .clickable {
                                     menuState.show {
                                         PlayerMenu(
@@ -407,7 +407,7 @@ fun Queue(
                         contentAlignment = Alignment.Center,
                     ) {
                         Icon(
-                            painter = painterResource(id = R.drawable.more_vert),
+                            painter = painterResource(id = R.drawable.more_horiz),
                             contentDescription = null,
                             modifier = Modifier.size(iconSize),
                             tint = iconButtonColor,
@@ -1327,7 +1327,7 @@ private fun PlayerQueueButton(
                 } else {
                     when (playerBackground) {
                         PlayerBackgroundStyle.BLUR, PlayerBackgroundStyle.GRADIENT -> {
-                            Color.White
+                            Color.White.copy(alpha = 0.6f)
                         }
 
                         PlayerBackgroundStyle.DEFAULT -> {

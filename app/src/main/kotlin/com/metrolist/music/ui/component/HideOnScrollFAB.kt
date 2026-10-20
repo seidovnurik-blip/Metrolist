@@ -62,7 +62,7 @@ fun BoxScope.HideOnScrollFAB(
                 SmallFloatingActionButton(
                     onClick = onRecognitionClick,
                     shape = CircleShape,
-                    containerColor = Color(0xFF2C2C2E),
+                    containerColor = Color(0xFF1C1C1E),
                     contentColor = Color.White,
                     modifier = Modifier
                         .size(48.dp)
@@ -79,7 +79,7 @@ fun BoxScope.HideOnScrollFAB(
             SmallFloatingActionButton(
                 onClick = onClick,
                 shape = CircleShape,
-                containerColor = Color(0xFF2C2C2E),
+                containerColor = Color(0xFF1C1C1E),
                 contentColor = Color(0xFFFA2D48),
                 modifier = Modifier
                     .size(48.dp)

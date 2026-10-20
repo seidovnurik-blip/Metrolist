@@ -4,6 +4,7 @@
  */
 
 package com.metrolist.music.ui.component
+import com.metrolist.music.R
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -229,7 +230,12 @@ private fun AppleNavItem(
     val haptics = LocalHapticFeedback.current
     val viewConfiguration = LocalViewConfiguration.current
     val currentIsSelected by rememberUpdatedState(isSelected)
-    val iconRes = if (isSelected) screen.iconIdActive else screen.iconIdInactive
+    val iconRes =
+        when (screen) {
+            Screens.Home -> R.drawable.apple_home
+            Screens.Search -> R.drawable.apple_search
+            else -> if (isSelected) screen.iconIdActive else screen.iconIdInactive
+        }
     val isSearchItem = screen == Screens.Search && onSearchLongClick != null
     val isHomeHoldItem = screen == Screens.Home && onHomeLongHold != null
     val interactionSource = remember { MutableInteractionSource() }
