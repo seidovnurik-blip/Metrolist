@@ -6,6 +6,7 @@
  */
 
 package com.metrolist.music.ui.player
+import com.metrolist.music.ui.utils.appleFrosted
 
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
@@ -380,7 +381,7 @@ private fun NewMiniPlayer(
                     .height(64.dp)
                     .offset { IntOffset(offsetXAnimatable.value.roundToInt(), 0) }
                     .clip(RoundedCornerShape(32.dp))
-                    .background(color = backgroundColor)
+                    .then(if (miniPlayerBackground == MiniPlayerBackgroundStyle.DEFAULT) Modifier.appleFrosted() else Modifier.background(color = backgroundColor))
                     .border(0.5.dp, Color(0xFF48484A), RoundedCornerShape(32.dp))
                     .clickable(
                         interactionSource = interactionSource,

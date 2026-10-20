@@ -4,6 +4,7 @@
  */
 
 package com.metrolist.music.ui.component
+import com.metrolist.music.ui.utils.appleFrosted
 import com.metrolist.music.R
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -177,7 +178,7 @@ fun AppNavigationBar(
                 .weight(1f)
                 .height(64.dp)
                 .clip(CircleShape)
-                .background(AppleNavSurface)
+                .appleFrosted()
                 .border(0.5.dp, AppleNavOutline, CircleShape)
                 .padding(horizontal = 6.dp, vertical = 4.dp),
             verticalAlignment = Alignment.CenterVertically,
@@ -267,7 +268,7 @@ private fun AppleNavItem(
 
     val tint = if (isSelected) AppleNavRed else AppleNavGray
     val bg = when {
-        circle -> AppleNavSurface
+        circle -> Color.Transparent
         isSelected -> Color.White.copy(alpha = 0.12f)
         else -> Color.Transparent
     }
@@ -275,7 +276,7 @@ private fun AppleNavItem(
     Box(
         modifier = modifier
             .clip(CircleShape)
-            .background(bg)
+            .then(if (circle) Modifier.appleFrosted() else Modifier.background(bg))
             .then(if (circle) Modifier.border(0.5.dp, AppleNavOutline, CircleShape) else Modifier)
             .clickable(interactionSource = interactionSource, indication = null) {
                 if (!isSearchItem && !isHomeHoldItem) {
